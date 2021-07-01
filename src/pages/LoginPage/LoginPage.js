@@ -1,47 +1,69 @@
-import React from 'react';
-import { Menu } from 'antd';
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import './LoginPageStyle.css';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import firebase from '@/firebase';
 
-const { SubMenu } = Menu;
+const LoginPage = ({ history }) => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({ mode: 'onChange' });
 
-const LoginPage = () => {
-  const handleClick = (e) => {
-    console.log('click ', e);
+  const [errorFromSubmit, setErrorFromSubmit] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+      await firebase.auth().signInWithEmailAndPassword(data.email, data.password);
+      history.push('/');
+      setLoading(false);
+    } catch (error) {
+      setErrorFromSubmit(error.message);
+      setLoading(false);
+      setTimeout(() => {
+        setErrorFromSubmit('');
+      }, 5000);
+    }
   };
+
   return (
-    <Menu
-      onClick={handleClick}
-      style={{ width: 256 }}
-      defaultSelectedKeys={['1']}
-      defaultOpenKeys={['sub1']}
-      mode='inline'
-      // theme='dark'
-    >
-      <SubMenu key='sub1' icon={<MailOutlined />} title='Navigation One'>
-        <Menu.ItemGroup key='g1' title='Item 1'>
-          <Menu.Item key='1'>Option 1</Menu.Item>
-          <Menu.Item key='2'>Option 2</Menu.Item>
-        </Menu.ItemGroup>
-        <Menu.ItemGroup key='g2' title='Item 2'>
-          <Menu.Item key='3'>Option 3</Menu.Item>
-          <Menu.Item key='4'>Option 4</Menu.Item>
-        </Menu.ItemGroup>
-      </SubMenu>
-      <SubMenu key='sub2' icon={<AppstoreOutlined />} title='Navigation Two'>
-        <Menu.Item key='5'>Option 5</Menu.Item>
-        <Menu.Item key='6'>Option 6</Menu.Item>
-        <SubMenu key='sub3' title='Submenu'>
-          <Menu.Item key='7'>Option 7</Menu.Item>
-          <Menu.Item key='8'>Option 8</Menu.Item>
-        </SubMenu>
-      </SubMenu>
-      <SubMenu key='sub4' icon={<SettingOutlined />} title='Navigation Three'>
-        <Menu.Item key='9'>Option 9</Menu.Item>
-        <Menu.Item key='10'>Option 10</Menu.Item>
-        <Menu.Item key='11'>Option 11</Menu.Item>
-        <Menu.Item key='12'>Option 12</Menu.Item>
-      </SubMenu>
-    </Menu>
+    <div className='auth-wrapper'>
+      <div style={{ textAlign: 'center' }}>
+        <h1>Login</h1>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <label>Email</label>
+        <input
+          name='email'
+          type='email'
+          {...register('email', {
+            required: true,
+            pattern: /^\S+@\S+$/i,
+          })}
+        />
+        {errors.email && <p>This email field is required</p>}
+
+        <label>Password</label>
+        <input
+          name='password'
+          type='password'
+          {...register('password', { required: true, minLength: 6 })}
+        />
+        {errors.password && errors.password.type === 'required' && (
+          <p>This password field is required</p>
+        )}
+        {errors.password && errors.password.type === 'minLength' && (
+          <p>Password must have at least 6 characters</p>
+        )}
+
+        {errorFromSubmit && <p>{errorFromSubmit}</p>}
+        <input type='submit' disabled={loading} />
+        <Link to='/sign-up'>아직 아이디가 없으세요?</Link>
+      </form>
+    </div>
   );
 };
 
