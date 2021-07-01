@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
-import './SignupPage.css';
+import './SignupPageStyle.css';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import firebase from '@/firebase';
 import md5 from 'md5';
 
-const SignupPage = () => {
+const SignupPage = ({ history }) => {
   const {
     register,
     watch,
@@ -37,6 +37,7 @@ const SignupPage = () => {
         image: createdUser.user.photoURL,
       });
 
+      history.push('/login');
       setLoading(false);
     } catch (error) {
       setErrorFromSubmit(error.message);
