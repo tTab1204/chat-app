@@ -8,7 +8,7 @@ import promiseMiddleware from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
 import Reducer from '@redux/reducers';
 import 'antd/dist/antd.less';
-import 'antd/dist/antd.dark.less'; // dark mode
+// import 'antd/dist/antd.dark.less'; // dark mode
 
 const createStoreWithMiddleWare = applyMiddleware(promiseMiddleware, ReduxThunk)(createStore);
 
