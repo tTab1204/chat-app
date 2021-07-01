@@ -22,5 +22,6 @@ module.exports = override(
     '@pages': path.resolve(__dirname, 'src/pages'),
     '@assets': path.resolve(__dirname, 'src/assets'),
     '@redux': path.resolve(__dirname, 'src/redux'),
+    '@types': path.resolve(__dirname, 'src/types'),
   }),
 );
