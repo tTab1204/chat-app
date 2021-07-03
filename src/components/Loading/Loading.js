@@ -3,9 +3,10 @@ import { Spin } from 'antd';
 
 const loadingStyle = {
   display: 'flex',
-  height: '600px',
+  height: '100vh',
   justifyContent: 'center',
   alignItems: 'center',
+  backgroundColor: '#24323f',
 };
 
 const Loading = () => {
