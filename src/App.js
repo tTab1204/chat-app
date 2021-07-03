@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ChatPage from '@pages/ChatPage/ChatPage';
 import LoginPage from '@pages/LoginPage/LoginPage';
 import SignupPage from '@pages/SignupPage/SignupPage';
-import { setUser } from '@redux/actions/user_actions';
 import Loading from '@components/Loading/Loading';
+import { setUser } from '@redux/actions/user_actions';
 
 function App() {
   const history = useHistory();
@@ -18,7 +18,10 @@ function App() {
       if (user) {
         history.push('/');
         dispatch(setUser(user));
-      } else history.push('/login');
+      } else {
+        history.push('/login');
+        dispatch(setUser(null));
+      }
     });
   }, []);
 
