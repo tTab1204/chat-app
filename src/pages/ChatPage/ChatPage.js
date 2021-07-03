@@ -1,9 +1,24 @@
 import React from 'react';
-import { Button } from 'antd';
+import Searchbar from '@components/Searchbar/Searchbar';
+import Sidebar from '@components/Sidebar/Sidebar';
+import MainPanel from '@components/MainPanel/MainPanel';
+import { MainPageContainer, SidebarContainer, MainPanelContainer } from './ChatPageStyle';
 const ChatPage = () => {
   return (
     <>
-      <Button type='primary'>무야호</Button>
+      <header>
+        <Searchbar />
+      </header>
+      <main>
+        <MainPageContainer>
+          <SidebarContainer>
+            <Sidebar />
+          </SidebarContainer>
+          <MainPanelContainer>
+            <MainPanel />
+          </MainPanelContainer>
+        </MainPageContainer>
+      </main>
     </>
   );
 };
