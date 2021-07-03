@@ -14,17 +14,15 @@ import 'antd/dist/antd.less';
 const createStoreWithMiddleWare = applyMiddleware(promiseMiddleware, ReduxThunk)(createStore);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider
-      store={createStoreWithMiddleWare(
-        Reducer,
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-      )}
-    >
-      <Router>
-        <App />
-      </Router>
-    </Provider>
-  </React.StrictMode>,
+  <Provider
+    store={createStoreWithMiddleWare(
+      Reducer,
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    )}
+  >
+    <Router>
+      <App />
+    </Router>
+  </Provider>,
   document.getElementById('root'),
 );
