@@ -1,5 +1,4 @@
-import { SET_USER } from '@/types/types';
-import { SET_PHOTO_URL } from '../../types/types';
+import { SET_USER, SET_PHOTO_URL } from '@/types/types';
 
 const initialUserState = {
   currentUser: null,
