@@ -7,7 +7,6 @@ import { MainPanelContainer, MessageBox } from './MainPanelStyle';
 const MainPanel = () => {
   return (
     <MainPanelContainer>
-      <MessageHeader />
       <MessageBox></MessageBox>
       <MessageForm />
     </MainPanelContainer>
