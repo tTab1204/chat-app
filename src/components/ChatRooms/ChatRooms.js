@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ChatListContainer,
   ChatLists,
@@ -99,7 +99,7 @@ const ChatRooms = () => {
   return (
     <div>
       <ChatListContainer>
-        <CaretDownOutlinedStyle showChatList={showChatList} onClick={isVisibleChatList} /> Chat
+        <CaretDownOutlinedStyle showchatlist={showChatList} onClick={isVisibleChatList} /> Chat
         Channels (1)
         <PlusOutlinedStyle onClick={showModal} />
       </ChatListContainer>
