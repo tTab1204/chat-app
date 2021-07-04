@@ -13,7 +13,7 @@ export const ChatListContainer = styled.div`
 export const CaretDownOutlinedStyle = styled(CaretDownOutlined)`
   margin-right: 5px;
   transition: all 0.2s ease-in-out;
-  transform: ${({ showChatList }) => (showChatList ? '' : 'rotate(-90deg)')};
+  transform: ${({ showchatlist }) => (showchatlist ? '' : 'rotate(-90deg)')};
 `;
 
 export const PlusOutlinedStyle = styled(PlusOutlined)`
