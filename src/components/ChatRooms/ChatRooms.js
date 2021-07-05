@@ -5,11 +5,13 @@ import {
   PlusOutlinedStyle,
   CaretDownOutlinedStyle,
   ChatRoom,
+  InputStyle,
 } from './ChatRommsStyle';
 import { Button, Form, Modal, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from '@/firebase';
 import { getCurrentChatRoom } from '@/redux/actions/chatRoom_actions';
+import Loading from '@components/Loading/Loading';
 
 const ChatRooms = () => {
   const dispatch = useDispatch();
@@ -23,6 +25,7 @@ const ChatRooms = () => {
   const [firstLoad, setFirstLoad] = useState(true);
   const [activeChatRoomId, setActiveChatRoomId] = useState('');
   const [showChatList, setShowChatList] = useState(true);
+  const [chatRoomsLoading, setChatRoomsLoading] = useState(true);
 
   const onChannelNameChange = (e) => {
     setName(e.target.value);
@@ -88,66 +91,69 @@ const ChatRooms = () => {
       chatRoomsArray.push(DataSnapshot.val());
       setChatRooms(chatRoomsArray);
       setFirstChatRoom();
+      setChatRoomsLoading(false);
     });
   };
 
   useEffect(() => {
-    getAllchatRooms();
+    if (chatRooms) getAllchatRooms();
     // challenge 1: clean up function은 언제 써야하는건지 아직도 정확히 모르겠다.
   }, [chatRooms.length]);
 
   return (
     <div>
-      <ChatListContainer>
-        <CaretDownOutlinedStyle showchatlist={showChatList} onClick={isVisibleChatList} /> Chat
-        Channels (1)
-        <PlusOutlinedStyle onClick={showModal} />
-      </ChatListContainer>
-      {showChatList && (
-        <ChatLists>
-          {chatRooms?.map((room) => (
-            <ChatRoom
-              key={room.id}
-              flag={room.id === activeChatRoomId}
-              onClick={() => selectChatRoom(room)}
-            >
-              # {room.name}
-            </ChatRoom>
-          ))}
-        </ChatLists>
-      )}
+      <div>
+        <ChatListContainer>
+          <CaretDownOutlinedStyle showchatlist={showChatList} onClick={isVisibleChatList} /> Chat
+          Channels (1)
+          <PlusOutlinedStyle onClick={showModal} />
+        </ChatListContainer>
+        {showChatList && (
+          <ChatLists>
+            {chatRooms?.map((room) => (
+              <ChatRoom
+                key={room.id}
+                flag={room.id === activeChatRoomId}
+                onClick={() => selectChatRoom(room)}
+              >
+                # {room.name}
+              </ChatRoom>
+            ))}
+          </ChatLists>
+        )}
 
-      {/* Modal */}
-      <Modal
-        theme='dark'
-        title='Create a chat channel'
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={[
-          <Button onClick={handleCancel}>Close</Button>,
-          <Button onClick={handleSubmit} type='primary'>
-            Save
-          </Button>,
-        ]}
-      >
-        <Form layout='vertical' onSubmit={handleSubmit}>
-          <Form.Item label='Channel Name' help={!name && `Please Enter Channel Name`}>
-            <Input
-              size='large'
-              placeholder='Enter your channel name'
-              style={{ marginBottom: '1.5rem' }}
-              onChange={onChannelNameChange}
-            />
-          </Form.Item>
-          <Form.Item label='Channel Description'>
-            <Input
-              size='large'
-              placeholder='Enter your channel description'
-              onChange={onChannelDescriptionChange}
-            />
-          </Form.Item>
-        </Form>
-      </Modal>
+        {/* Modal */}
+        <Modal
+          theme='dark'
+          title='Create a chat channel'
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={[
+            <Button onClick={handleCancel}>Close</Button>,
+            <Button disabled={name ? false : true} onClick={handleSubmit} type='primary'>
+              Save
+            </Button>,
+          ]}
+        >
+          <Form layout='vertical' onSubmit={handleSubmit}>
+            <Form.Item label='Channel Name'>
+              <InputStyle
+                size='large'
+                placeholder='Enter your channel name'
+                onChange={onChannelNameChange}
+              />
+              {!name && <p style={{ color: '#e82323' }}>Please Enter Channel Name</p>}
+            </Form.Item>
+            <Form.Item label='Channel Description'>
+              <Input
+                size='large'
+                placeholder='Enter your channel description'
+                onChange={onChannelDescriptionChange}
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
+      </div>
     </div>
   );
 };

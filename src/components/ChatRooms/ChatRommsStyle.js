@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Input } from 'antd';
 import { PlusOutlined, CaretDownOutlined } from '@ant-design/icons';
 
 export const ChatListContainer = styled.div`
@@ -44,4 +45,8 @@ export const ChatRoom = styled.li`
     font-weight: 500;
     color: white;
   }
+`;
+
+export const InputStyle = styled(Input)`
+  margin-bottom: 10px;
 `;
