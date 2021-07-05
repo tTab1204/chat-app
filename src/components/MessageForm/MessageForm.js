@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Form, Progress } from 'antd';
-import { TextAreaBox, ImageUploadBox, SendButtonBox } from './MessageFormStyle';
+import {
+  TextAreaBox,
+  ImageUploadBox,
+  SendButtonBox,
+  ErrorMsgBox,
+  FileUploadInput,
+  FormStyle,
+} from './MessageFormStyle';
 import { PlusCircleFilled, SendOutlined } from '@ant-design/icons';
 import firebase from '@/firebase';
 import { useSelector } from 'react-redux';
+import mime from 'mime-types';
 
 const MessageForm = () => {
   const user = useSelector((state) => state.user.currentUser);
   const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
   const messagesRef = firebase.database().ref('messages');
+  const inputOpenImageRef = useRef();
+  const storageRef = firebase.storage().ref();
 
   const [content, setContent] = useState('');
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [percentage, setPercentage] = useState(0);
 
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -55,6 +66,42 @@ const MessageForm = () => {
     }
   };
 
+  const handleOpenImageRef = () => {
+    inputOpenImageRef.current.click();
+  };
+
+  const handleUploadImage = (e) => {
+    const file = e.target.files[0];
+    const filePath = `/message/public/${file.name}`;
+    const metadata = { contentType: mime.lookup(file.name) };
+    setLoading(true);
+    try {
+      // Challenge2: async await의 사용에 대해 더 이해하게 된 부분
+      let uploadFile = storageRef.child(filePath).put(file, metadata);
+      uploadFile.on(
+        'state_changed',
+        (UploadTaskSnapshot) => {
+          const percent = Math.round(
+            (UploadTaskSnapshot.bytesTransferred / UploadTaskSnapshot.totalBytes) * 100,
+          );
+          setPercentage(percent);
+        },
+        (error) => {
+          console.error(error);
+          setLoading(false);
+        },
+        () => {
+          uploadFile.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            messagesRef.child(chatRoom.id).push().set(createMessage(downloadURL));
+            setLoading(false);
+          });
+        },
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const onKeydownChat = (e) => {
     if (e.key === 'Enter') {
       if (!e.shiftKey) {
@@ -66,9 +113,9 @@ const MessageForm = () => {
 
   return (
     <div>
-      <Form style={{ display: 'flex' }} onSubmit={handleSubmit}>
+      <FormStyle onSubmit={handleSubmit}>
         <ImageUploadBox>
-          <PlusCircleFilled />
+          <PlusCircleFilled onClick={handleOpenImageRef} />
         </ImageUploadBox>
         <TextAreaBox
           placeholder='# First Channel - Send message..'
@@ -78,18 +125,27 @@ const MessageForm = () => {
           onKeyPress={onKeydownChat}
         />
         <SendButtonBox>
-          <SendOutlined onClick={handleSubmit} style={{ color: '#058569' }} />
+          <SendOutlined onClick={handleSubmit} />
         </SendButtonBox>
-      </Form>
-      <Progress percent={30} strokeColor='#058569' size='small' />
+      </FormStyle>
+
+      {!(percentage === 0 || percentage === 100) && (
+        <Progress percent={percentage} strokeColor='#058569' size='small' />
+      )}
 
       <div>
         {errors.map((errorMsg, i) => (
-          <p style={{ color: '#e82323' }} key={i}>
-            {errorMsg}
-          </p>
+          <ErrorMsgBox key={i}>{errorMsg}</ErrorMsgBox>
         ))}
       </div>
+
+      {/* Invisible */}
+      <FileUploadInput
+        accept='image/jpeg, image/png'
+        type='file'
+        ref={inputOpenImageRef}
+        onChange={handleUploadImage}
+      />
     </div>
   );
 };

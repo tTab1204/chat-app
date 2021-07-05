@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Input } from 'antd';
+import { Input, Form } from 'antd';
 
 const { TextArea } = Input;
 
@@ -36,7 +36,23 @@ export const SendButtonBox = styled.div`
   font-size: 1rem;
   /* display: none; */
 
+  & > span {
+    color: #058569;
+  }
+
   @media screen and (max-width: 540px) {
     display: inline-block;
   }
+`;
+
+export const ErrorMsgBox = styled.p`
+  color: #e82323;
+`;
+
+export const FileUploadInput = styled.input`
+  display: none;
+`;
+
+export const FormStyle = styled(Form)`
+  display: flex;
 `;
