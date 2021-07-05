@@ -104,7 +104,7 @@ const ChatRooms = () => {
       <div>
         <ChatListContainer>
           <CaretDownOutlinedStyle showchatlist={showChatList} onClick={isVisibleChatList} /> Chat
-          Channels (1)
+          Channels
           <PlusOutlinedStyle onClick={showModal} />
         </ChatListContainer>
         {showChatList && (
