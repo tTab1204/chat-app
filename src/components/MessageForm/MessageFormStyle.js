@@ -9,6 +9,10 @@ export const TextAreaBox = styled(TextArea)`
   border: none;
   border-radius: 10px;
   padding: 8px;
+
+  @media screen and (max-width: 540px) {
+    font-size: 0.8rem;
+  }
 `;
 
 export const ImageUploadBox = styled.div`
@@ -16,7 +20,23 @@ export const ImageUploadBox = styled.div`
   padding: 8px;
   border: none;
   border-radius: 10px;
+  margin-right: 5px;
+  background-color: #40444b;
+  font-size: 1rem;
+  cursor: pointer;
+`;
+
+export const SendButtonBox = styled.div`
+  text-align: center;
+  padding: 8px;
+  border: none;
+  border-radius: 10px;
   margin-left: 5px;
   background-color: #40444b;
   font-size: 1rem;
+  /* display: none; */
+
+  @media screen and (max-width: 540px) {
+    display: inline-block;
+  }
 `;
