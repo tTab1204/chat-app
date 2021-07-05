@@ -11,13 +11,15 @@ const Message = ({ message, user, key }) => {
   };
 
   const isMessageMine = (message, user) => {
-    return message.user.id === user.uid;
+    if (user) {
+      return message.user.id === user.uid;
+    }
   };
 
   return (
     <div>
       <CommentStyle
-        flag={isMessageMine}
+        flag={isMessageMine(message, user)}
         author={message.user.name}
         avatar={<Avatar src={message.user.image} alt={message.user.name} />}
         content={
