@@ -6,7 +6,7 @@ export const MainPanelContainer = styled.div`
 
 export const MessageBox = styled.div`
   width: 100%;
-  height: 60vh;
+  height: 70vh;
   background-color: #40444b;
   border-radius: 4px;
   padding: 1rem;
