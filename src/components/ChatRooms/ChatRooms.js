@@ -11,7 +11,6 @@ import { Button, Form, Modal, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from '@/firebase';
 import { getCurrentChatRoom } from '@/redux/actions/chatRoom_actions';
-import Loading from '@components/Loading/Loading';
 
 const ChatRooms = () => {
   const dispatch = useDispatch();
