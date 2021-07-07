@@ -13,4 +13,12 @@ export const CommentStyle = styled(Comment)`
     > .ant-comment-content-author-name {
     color: ${({ flag }) => (flag ? '#52c41a' : '')};
   }
+
+  & > .ant-comment-inner > .ant-comment-content > .ant-comment-content-detail > img {
+    max-width: 30%;
+
+    @media screen and (max-width: 540px) {
+      max-width: 60%;
+    }
+  }
 `;
