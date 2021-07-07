@@ -24,7 +24,7 @@ const Message = ({ message, user, key }) => {
         avatar={<Avatar src={message.user.image} alt={message.user.name} />}
         content={
           isImage(message) ? (
-            <img style={{ maxWidth: '300px' }} src={message.image} alt={message.key} />
+            <img src={message.image} alt={message.key} />
           ) : (
             <p>{message.content}</p>
           )
