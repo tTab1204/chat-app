@@ -1,20 +1,25 @@
-import { SET_CURRENT_CHAT_ROOM } from '@/types/types';
+import { SET_CURRENT_CHAT_ROOM, SET_PRIVATE_CHAT_ROOM } from '@/types/types';
 
 const initialChatRoomState = {
   currentChatRoom: null,
+  isPrivateChatRoom: false,
 };
 
-const userReducer = (state = initialChatRoomState, action) => {
+const chatRoomReducer = (state = initialChatRoomState, action) => {
   switch (action.type) {
     case SET_CURRENT_CHAT_ROOM:
       return {
         ...state,
         currentChatRoom: action.payload,
       };
-
+    case SET_PRIVATE_CHAT_ROOM:
+      return {
+        ...state,
+        isPrivateChatRoom: action.payload,
+      };
     default:
       return state;
   }
 };
 
-export default userReducer;
+export default chatRoomReducer;
