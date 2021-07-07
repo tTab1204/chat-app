@@ -16,6 +16,8 @@ import mime from 'mime-types';
 const MessageForm = () => {
   const user = useSelector((state) => state.user.currentUser);
   const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
+  const isPrivateChatRoom = useSelector((state) => state.chatRoom.isPrivateChatRoom);
+
   const messagesRef = firebase.database().ref('messages');
   const inputOpenImageRef = useRef();
   const storageRef = firebase.storage().ref();
@@ -70,9 +72,14 @@ const MessageForm = () => {
     inputOpenImageRef.current.click();
   };
 
+  const getPath = () => {
+    if (isPrivateChatRoom) return `/message/private/${chatRoom.id}`;
+    else return `/message/public`;
+  };
+
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
-    const filePath = `/message/public/${file.name}`;
+    const filePath = `${getPath()}/${file.name}`;
     const metadata = { contentType: mime.lookup(file.name) };
     setLoading(true);
     try {
