@@ -83,7 +83,11 @@ export const MenuBox = styled.div`
   padding: 0.8rem;
   display: none;
 
+  & > span {
+    font-size: 2rem;
+  }
+
   @media screen and (max-width: 540px) {
-    display: inline-block;
+    display: block;
   }
 `;
