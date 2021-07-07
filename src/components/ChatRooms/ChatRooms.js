@@ -6,11 +6,11 @@ import {
   CaretDownOutlinedStyle,
   ChatRoom,
   InputStyle,
-} from './ChatRommsStyle';
+} from './ChatRoomsStyle';
 import { Button, Form, Modal, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from '@/firebase';
-import { getCurrentChatRoom } from '@/redux/actions/chatRoom_actions';
+import { getCurrentChatRoom, setPrivateChatRoom } from '@/redux/actions/chatRoom_actions';
 
 const ChatRooms = () => {
   const dispatch = useDispatch();
@@ -72,6 +72,7 @@ const ChatRooms = () => {
 
   const selectChatRoom = (room) => {
     dispatch(getCurrentChatRoom(room));
+    dispatch(setPrivateChatRoom(false));
     setActiveChatRoomId(room.id);
   };
 
@@ -103,8 +104,7 @@ const ChatRooms = () => {
     <div>
       <div>
         <ChatListContainer>
-          <CaretDownOutlinedStyle showchatlist={showChatList} onClick={isVisibleChatList} /> Chat
-          Channels
+          <CaretDownOutlinedStyle flag={showChatList} onClick={isVisibleChatList} /> Chat Channels
           <PlusOutlinedStyle onClick={showModal} />
         </ChatListContainer>
         {showChatList && (
