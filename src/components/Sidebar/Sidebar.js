@@ -10,7 +10,7 @@ const Sidebar = ({ showSidebar }) => {
   const showMenu = useSelector((state) => state.menu.showMenu);
 
   return (
-    <SidebarContainer flag={showMenu} showSidebar={showSidebar}>
+    <SidebarContainer flag={showMenu}>
       <SidebarWrapper>
         <SidebarBox>
           <UserPanel />

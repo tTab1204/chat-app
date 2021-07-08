@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Input } from 'antd';
+import { Input, Badge } from 'antd';
 import { PlusOutlined, CaretDownOutlined } from '@ant-design/icons';
 
 export const ChatListContainer = styled.div`
@@ -50,3 +50,13 @@ export const ChatRoom = styled.li`
 export const InputStyle = styled(Input)`
   margin-bottom: 10px;
 `;
+
+export const BadgeStyle = {
+  marginBottom: '3px',
+  background: '#ff4d4f',
+  boxShadow: 'none',
+};
+
+export const floatRight = {
+  float: 'right',
+};

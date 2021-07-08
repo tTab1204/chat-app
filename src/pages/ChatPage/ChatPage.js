@@ -3,9 +3,10 @@ import Searchbar from '@components/Searchbar/Searchbar';
 import Sidebar from '@components/Sidebar/Sidebar';
 import MainPanel from '@components/MainPanel/MainPanel';
 import { useSelector } from 'react-redux';
-import { MainPageContainer, SidebarContainer, MainPanelContainer } from './ChatPageStyle';
+import { MainPageContainer, MainPanelContainer } from './ChatPageStyle';
 
 const ChatPage = () => {
+  const currentUser = useSelector((state) => state.user.currentUser);
   const currentChatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
 
   return (
@@ -15,9 +16,7 @@ const ChatPage = () => {
       </header>
       <main>
         <MainPageContainer>
-          <SidebarContainer>
-            <Sidebar />
-          </SidebarContainer>
+          <Sidebar key={currentUser?.uid} />
           <MainPanelContainer>
             <MainPanel key={currentChatRoom?.id} />
           </MainPanelContainer>

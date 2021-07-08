@@ -6,8 +6,10 @@ import {
   CaretDownOutlinedStyle,
   ChatRoom,
   InputStyle,
+  BadgeStyle,
+  floatRight,
 } from './ChatRoomsStyle';
-import { Button, Form, Modal, Input } from 'antd';
+import { Button, Form, Modal, Input, Badge, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import firebase from '@/firebase';
 import { getCurrentChatRoom, setPrivateChatRoom } from '@/redux/actions/chatRoom_actions';
@@ -15,7 +17,9 @@ import { getCurrentChatRoom, setPrivateChatRoom } from '@/redux/actions/chatRoom
 const ChatRooms = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.currentUser);
+  const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
   const chatRoomsRef = firebase.database().ref('chatRooms');
+  const messagesRef = firebase.database().ref('messages');
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [name, setName] = useState('');
@@ -24,7 +28,8 @@ const ChatRooms = () => {
   const [firstLoad, setFirstLoad] = useState(true);
   const [activeChatRoomId, setActiveChatRoomId] = useState('');
   const [showChatList, setShowChatList] = useState(true);
-  const [chatRoomsLoading, setChatRoomsLoading] = useState(true);
+  const [, setChatRoomsLoading] = useState(true);
+  const [notifications, setNotifications] = useState([]);
 
   const onChannelNameChange = (e) => {
     setName(e.target.value);
@@ -85,20 +90,74 @@ const ChatRooms = () => {
     setFirstLoad(false);
   };
 
-  const getAllchatRooms = async () => {
+  const getAllchatRoomsListeners = async () => {
     let chatRoomsArray = [];
     await chatRoomsRef.on('child_added', (DataSnapshot) => {
       chatRoomsArray.push(DataSnapshot.val());
       setChatRooms(chatRoomsArray);
       setFirstChatRoom();
       setChatRoomsLoading(false);
+
+      addNotificationListeners(DataSnapshot.key);
     });
   };
 
+  const addNotificationListeners = (chatRoomId) => {
+    messagesRef.child(chatRoomId).on('value', (DataSnapshot) => {
+      if (chatRoom) {
+        handleNotification(chatRoomId, chatRoom.id, notifications, DataSnapshot);
+      }
+    });
+  };
+
+  // Challenge
+  const handleNotification = (chatRoomId, currentChatRoomId, notifications, DataSnapshot) => {
+    let index = notifications.findIndex((notification) => notification.id === chatRoomId);
+    let lastTotal = 0;
+
+    // 해당 채팅방의 알림 정보가 없을 때
+    if (index === -1) {
+      notifications.push({
+        id: chatRoomId,
+        total: DataSnapshot.numChildren(),
+        lastKnownTotal: DataSnapshot.numChildren(),
+        count: 0,
+      });
+    }
+
+    // 이미 해당 채팅방의 알림 정보가 있을 때
+    else {
+      // 상대방이 채팅 보내는 그 해당 채팅방에 있지 않을 때
+      if (chatRoomId !== currentChatRoomId) {
+        lastTotal = notifications[index].lastKnownTotal;
+        console.log('lastTotal: ', lastTotal);
+
+        if (DataSnapshot.numChildren() - lastTotal > 0) {
+          notifications[index].count = DataSnapshot.numChildren() - lastTotal;
+        }
+      }
+      notifications[index].total = DataSnapshot.numChildren();
+    }
+    setNotifications(notifications);
+    console.log('notifications: ', notifications);
+  };
+
+  // const getNotificationCount = (room) => {
+  //   let count = 0;
+
+  //   notifications.forEach((notification) => {
+  //     if (notification.id === room.id) {
+  //       count = notification.count;
+  //       console.log('count: ', count);
+  //     }
+  //   });
+  //   if (count > 0) return count;
+  // };
+
   useEffect(() => {
-    if (chatRooms) getAllchatRooms();
+    if (chatRooms) getAllchatRoomsListeners();
     // challenge 1: clean up function은 언제 써야하는건지 아직도 정확히 모르겠다.
-  }, [chatRooms.length]);
+  }, [chatRooms.length, notifications.length]);
 
   return (
     <div>
@@ -116,6 +175,15 @@ const ChatRooms = () => {
                 onClick={() => selectChatRoom(room)}
               >
                 # {room.name}
+                <div style={floatRight}>
+                  <Badge
+                    count={
+                      // getNotificationCount(room)
+                      5
+                    }
+                    style={BadgeStyle}
+                  ></Badge>
+                </div>
               </ChatRoom>
             ))}
           </ChatLists>

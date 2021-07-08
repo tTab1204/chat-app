@@ -42,6 +42,7 @@ export const ChannelName = styled.div`
   font-size: 1.1rem;
   margin-left: 1rem;
   margin-top: 0.9rem;
+  color: #ececec;
 
   @media screen and (max-width: 540px) {
     display: none;

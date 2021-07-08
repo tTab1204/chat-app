@@ -19,6 +19,8 @@ const MessageForm = () => {
   const isPrivateChatRoom = useSelector((state) => state.chatRoom.isPrivateChatRoom);
 
   const messagesRef = firebase.database().ref('messages');
+  // const userConnectRef = firebase.database().ref('info/connected');
+  // console.log('userConnectRef: ', userConnectRef);
   const inputOpenImageRef = useRef();
   const storageRef = firebase.storage().ref();
 
