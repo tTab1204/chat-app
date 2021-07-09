@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import mime from 'mime-types';
 
 const MessageForm = () => {
+  console.log('test PR');
   const user = useSelector((state) => state.user.currentUser);
   const chatRoom = useSelector((state) => state.chatRoom.currentChatRoom);
   const isPrivateChatRoom = useSelector((state) => state.chatRoom.isPrivateChatRoom);
