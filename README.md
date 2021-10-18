@@ -14,7 +14,7 @@
 - Redux
 - Firebase
 - Socket.io
-- 
+
 ## Installation
 ```
 $ npm install
